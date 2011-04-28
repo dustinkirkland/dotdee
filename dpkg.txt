@@ -1,0 +1,1 @@
+if installing into /etc, and destination exists, and is a symlink, and symlink points to a /var/lib/dotdee directory, then install to the dotdee 50-base location

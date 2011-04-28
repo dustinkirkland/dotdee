@@ -1,0 +1,32 @@
+#!/bin/sh -e
+
+error() {
+	echo "ERROR: $@" 1>&2
+	exit 1
+}
+
+# Test for applicability
+[ -f "$1" ] || error "Not a regular file [$1]"
+case "$1" in
+	/etc/*)
+		true
+	;;
+	*)
+		error "Not a configuration file in /etc [$1]"
+esac
+
+# Create the directory and move the configuration file
+mkdir -p "/etc/dotdee/${1}.d"
+mv -f "$1" "/etc/dotdee/${1}/50-base"
+touch "/var/run/dotdee/${1}"
+
+# Re-establish links to configuration file
+# Normalize update-alternatives-name
+ua_name=$(echo "${1}" | sed "s:/:-:g")
+# At a higher priority, to the generated one
+update-alternatives --install "${1}" "$ua_name" "/var/run/dotdee/${1}" 50
+# And at a lower priority, to the original, base one
+update-alternatives --install "${1}" "$ua_name" "/etc/dotdee/${1}.d/50-base" 20
+
+# Restart dotdee to rebuild configuration files
+service dotdee restart
