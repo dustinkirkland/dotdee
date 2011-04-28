@@ -1,43 +1,115 @@
 #!/bin/sh -e
+#
+#    dotdee - convert a configuration file to be generated from a .d directory
+#    Copyright (C) 2010 Dustin Kirkland <kirkland@ubuntu.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CONF="/etc/dotdee"
+ORIGINAL="50-original"
+
+info() {
+	echo "INFO: $@" 1>&2
+}
 
 error() {
 	echo "ERROR: $@" 1>&2
 	exit 1
 }
 
-generate() {
-	# Construct the configuration file via concatenation
-	for i in "${1}".d/*; do
-		# BUG: We should determine the type of configuration file,
-		#      obtain the comment character,
-		#      and prepend a header that notes that this file is
-		#      managed by dotdee.
-		cat "$i" >> "$CONF/${1}"
-	done
+usage() {
+	echo
+	echo "dotdee --setup|--generate|--undo CONFFILE"
+	echo
+	echo "  --setup CONFFILE	convert CONFFILE to a .d directory structure"
+	echo "  --generate CONFFILE	update the generated CONFFILE immediately"
+	echo "  --undo CONFFILE		undo/revert a dotdee setup"
+	echo
 }
 
-case "$1" in
-	/etc/*)
+ua_name() {
+	echo "${1}" | sed "s:/:-:g"
+}
+
+is_dotdee() {
+	u=$(ua_name "${1}")
+	update-alternatives --list "${u}" | grep -qs "^${CONF}/${1}$"
+}
+
+setup() {
+	# Setup a configuration file for dotdee management
+	if is_dotdee "${1}"; then
+		error "[${1}] is already managed by dotdee"
+	else
 		# Test for applicability
 		[ -f "${1}" ] || error "Not a regular file [${1}]"
 		# Create the directory and move the configuration file
 		mkdir -p "${CONF}/${1}.d"
-		mv -f "${1}" "${CONF}/${1}.d/50-original"
+		mv -f "${1}" "${CONF}/${1}.d/${ORIGINAL}"
 		generate "${1}"
 		# Re-establish links to configuration file
 		# Normalize update-alternatives-name
-		ua_name=$(echo "${1}" | sed "s:/:-:g")
+		u=$(ua_name "${1}")
 		# Establish update-alternatives link at a higher priority to the generated one
-		update-alternatives --install "${1}" "$ua_name" "$CONF/${1}" 50
+		update-alternatives --install "${1}" "${u}" "$CONF/${1}" 50
 		# And at a lower priority, to the original one
-		update-alternatives --install "${1}" "$ua_name" "$CONF/${1}.d/50-original" 20
+		update-alternatives --install "${1}" "${u}" "$CONF/${1}.d/${ORIGINAL}" 20
+	fi
+}
+
+generate() {
+	# Construct the configuration file via concatenation
+	if is_dotdee "${1}"; then
+		tmp=$(mktemp)
+		# BUG: We should determine the type of configuration file, obtain the
+		#      comment character, and prepend a header that documents that this
+		#      file is managed by dotdee(8).
+		for i in "${CONF}/${1}.d/"*; do
+			cat "${i}" >> "${tmp}"
+		done
+		mv -f "${tmp}" "$CONF/${1}"
+	else
+		error "[${1}] is not managed by dotdee"
+	fi
+}
+
+undo() {
+	# Undo a dotdee setup
+	if is_dotdee "${1}"; then
+		u=$(ua_name "${1}")
+		update-alternatives --remove "${u}" "${CONF}/${1}"
+		update-alternatives --remove "${u}" "${CONF}/${1}.d/${ORIGINAL}"
+		cp -af "${CONF}/${1}.d/${ORIGINAL}" "${1}"
+		info "[${1}] has been restored"
+		info "You may want to manually remove [${CONF}/${1}.d]"
+	else
+		error "[${1}] is not managed by dotdee"
+	fi
+}
+
+# Main
+case "${1}" in
+	--setup)
+		setup "${2}"
 	;;
 	--generate)
 		generate "${2}"
 	;;
+	--undo)
+		undo "${2}"
+	;;
 	*)
-		error "Invalid argument"
+		usage
+		error "Invalid argument [${1}]"
 	;;
 esac
