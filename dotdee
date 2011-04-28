@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CONF="/etc/dotdee"
-ORIGINAL="50-original"
+ORIGINAL="50-dpkg-original"
 
 info() {
 	echo "INFO: $@" 1>&2
@@ -38,12 +38,14 @@ usage() {
 }
 
 ua_name() {
-	echo "${1}" | sed "s:/:-:g"
+	# Ensure a unique name in update-alternatives
+	echo "${1}" | sed -e "s:/:-:g" -e "s:^-\+::"
 }
 
 is_dotdee() {
+	# Is this file managed by dotdee?
 	u=$(ua_name "${1}")
-	update-alternatives --list "${u}" | grep -qs "^${CONF}/${1}$"
+	update-alternatives --list "${u}" 2>/dev/null | grep -qs "^${CONF}/${1}$"
 }
 
 setup() {
@@ -56,24 +58,24 @@ setup() {
 		# Create the directory and move the configuration file
 		mkdir -p "${CONF}/${1}.d"
 		mv -f "${1}" "${CONF}/${1}.d/${ORIGINAL}"
+		NEW=1
 		generate "${1}"
 		# Re-establish links to configuration file
-		# Normalize update-alternatives-name
 		u=$(ua_name "${1}")
 		# Establish update-alternatives link at a higher priority to the generated one
 		update-alternatives --install "${1}" "${u}" "$CONF/${1}" 50
-		# And at a lower priority, to the original one
+		# Establish update-alternatives link at a lower priority to the original one
 		update-alternatives --install "${1}" "${u}" "$CONF/${1}.d/${ORIGINAL}" 20
 	fi
 }
 
 generate() {
 	# Construct the configuration file via concatenation
-	if is_dotdee "${1}"; then
+	if is_dotdee "${1}" || [ "${NEW}" = 1 ]; then
 		tmp=$(mktemp)
 		# BUG: We should determine the type of configuration file, obtain the
 		#      comment character, and prepend a header that documents that this
-		#      file is managed by dotdee(8).
+		#      file is managed by dotdee(8), as a hint to humans who try to edit!
 		for i in "${CONF}/${1}.d/"*; do
 			cat "${i}" >> "${tmp}"
 		done
@@ -103,10 +105,14 @@ case "${1}" in
 		setup "${2}"
 	;;
 	--generate)
+		NEW=
 		generate "${2}"
 	;;
 	--undo)
 		undo "${2}"
+	;;
+	--help)
+		usage
 	;;
 	*)
 		usage
