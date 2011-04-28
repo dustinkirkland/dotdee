@@ -1,32 +1,43 @@
 #!/bin/sh -e
 
+CONF="/etc/dotdee"
+
 error() {
 	echo "ERROR: $@" 1>&2
 	exit 1
 }
 
-# Test for applicability
-[ -f "$1" ] || error "Not a regular file [$1]"
+generate() {
+	# Construct the configuration file via concatenation
+	for i in "${1}".d/*; do
+		# BUG: We should determine the type of configuration file,
+		#      obtain the comment character,
+		#      and prepend a header that notes that this file is
+		#      managed by dotdee.
+		cat "$i" >> "$CONF/${1}"
+	done
+}
+
 case "$1" in
 	/etc/*)
-		true
+		# Test for applicability
+		[ -f "${1}" ] || error "Not a regular file [${1}]"
+		# Create the directory and move the configuration file
+		mkdir -p "${CONF}/${1}.d"
+		mv -f "${1}" "${CONF}/${1}.d/50-original"
+		generate "${1}"
+		# Re-establish links to configuration file
+		# Normalize update-alternatives-name
+		ua_name=$(echo "${1}" | sed "s:/:-:g")
+		# Establish update-alternatives link at a higher priority to the generated one
+		update-alternatives --install "${1}" "$ua_name" "$CONF/${1}" 50
+		# And at a lower priority, to the original one
+		update-alternatives --install "${1}" "$ua_name" "$CONF/${1}.d/50-original" 20
+	;;
+	--generate)
+		generate "${2}"
 	;;
 	*)
-		error "Not a configuration file in /etc [$1]"
+		error "Invalid argument"
+	;;
 esac
-
-# Create the directory and move the configuration file
-mkdir -p "/etc/dotdee/${1}.d"
-mv -f "$1" "/etc/dotdee/${1}/50-base"
-touch "/var/run/dotdee/${1}"
-
-# Re-establish links to configuration file
-# Normalize update-alternatives-name
-ua_name=$(echo "${1}" | sed "s:/:-:g")
-# At a higher priority, to the generated one
-update-alternatives --install "${1}" "$ua_name" "/var/run/dotdee/${1}" 50
-# And at a lower priority, to the original, base one
-update-alternatives --install "${1}" "$ua_name" "/etc/dotdee/${1}.d/50-base" 20
-
-# Restart dotdee to rebuild configuration files
-service dotdee restart
