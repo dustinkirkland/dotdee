@@ -1,0 +1,8 @@
+dotdee (1.0) unreleased; urgency=low
+
+  * Initial release
+  * === added directory debian, debian/compat, debian/control,
+    debian/copyright, debian/install, debian/manpages, debian/rules:
+    - initial packaging
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
