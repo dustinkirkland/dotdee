@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-#    dotdee - convert a configuration file to be generated from a .d directory
+#    dotdee - convert a flat file into one dynamically generated from a .d directory
 #    Copyright (C) 2010 Dustin Kirkland <kirkland@ubuntu.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-CONF="/etc/dotdee"
+DIR="/etc/dotdee"
 ORIGINAL="50-original"
 
 info() {
@@ -29,11 +29,11 @@ error() {
 
 usage() {
 	echo
-	echo "dotdee --setup|--update|--undo CONFFILE"
+	echo "dotdee --setup|--update|--undo FILENAME"
 	echo
-	echo "  --setup CONFFILE	convert CONFFILE to a .d directory structure"
-	echo "  --update CONFFILE	update the generated CONFFILE immediately"
-	echo "  --undo CONFFILE		undo/revert a dotdee setup"
+	echo "  --setup FILENAME	convert FILENAME to a .d directory structure"
+	echo "  --update FILENAME	update the generated FILENAME immediately"
+	echo "  --undo FILENAME		undo/revert a dotdee setup"
 	echo
 }
 
@@ -45,41 +45,41 @@ u_a_name() {
 is_dotdee() {
 	# Is this file managed by dotdee?
 	u=$(u_a_name "${1}")
-	update-alternatives --list "${u}" 2>/dev/null | grep -qs "^${CONF}/${1}$"
+	update-alternatives --list "${u}" 2>/dev/null | grep -qs "^${DIR}/${1}$"
 }
 
 setup() {
-	# Setup a configuration file for dotdee management
+	# Setup a file for dotdee management
 	if is_dotdee "${1}"; then
 		error "[${1}] is already managed by dotdee"
 	else
 		# Test for applicability
 		[ -f "${1}" ] || error "Not a regular file [${1}]"
-		# Create the directory and move the configuration file
-		mkdir -p "${CONF}/${1}.d"
-		mv -f "${1}" "${CONF}/${1}.d/${ORIGINAL}"
+		# Create the directory and move the file
+		mkdir -p "${DIR}/${1}.d"
+		mv -f "${1}" "${DIR}/${1}.d/${ORIGINAL}"
 		NEW=1
 		update "${1}"
-		# Re-establish links to configuration file
+		# Re-establish links to file
 		u=$(u_a_name "${1}")
 		# Establish update-alternatives link at a higher priority to the generated one
-		update-alternatives --install "${1}" "${u}" "$CONF/${1}" 50
+		update-alternatives --install "${1}" "${u}" "$DIR/${1}" 50
 		# Establish update-alternatives link at a lower priority to the original one
-		update-alternatives --install "${1}" "${u}" "$CONF/${1}.d/${ORIGINAL}" 20
+		update-alternatives --install "${1}" "${u}" "$DIR/${1}.d/${ORIGINAL}" 20
 	fi
 }
 
 update() {
-	# Construct the configuration file via concatenation
+	# Construct the file via concatenation
 	if is_dotdee "${1}" || [ "${NEW}" = 1 ]; then
 		tmp=$(mktemp)
-		# BUG: We should determine the type of configuration file, obtain the
+		# BUG: We should determine the type of file, obtain the
 		#      comment character, and prepend a header that documents that this
 		#      file is managed by dotdee(8), as a hint to humans who try to edit!
-		for i in "${CONF}/${1}.d/"*; do
+		for i in "${DIR}/${1}.d/"*; do
 			cat "${i}" >> "${tmp}"
 		done
-		mv -f "${tmp}" "$CONF/${1}"
+		mv -f "${tmp}" "$DIR/${1}"
 	else
 		error "[${1}] is not managed by dotdee"
 	fi
@@ -89,11 +89,11 @@ undo() {
 	# Undo a dotdee setup
 	if is_dotdee "${1}"; then
 		u=$(u_a_name "${1}")
-		update-alternatives --remove "${u}" "${CONF}/${1}"
-		update-alternatives --remove "${u}" "${CONF}/${1}.d/${ORIGINAL}"
-		cp -af "${CONF}/${1}.d/${ORIGINAL}" "${1}"
+		update-alternatives --remove "${u}" "${DIR}/${1}"
+		update-alternatives --remove "${u}" "${DIR}/${1}.d/${ORIGINAL}"
+		cp -af "${DIR}/${1}.d/${ORIGINAL}" "${1}"
 		info "[${1}] has been restored"
-		info "You may want to manually remove [${CONF}/${1}.d]"
+		info "You may want to manually remove [${DIR}/${1}.d]"
 	else
 		error "[${1}] is not managed by dotdee"
 	fi
