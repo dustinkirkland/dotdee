@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 CONF="/etc/dotdee"
-ORIGINAL="50-dpkg-original"
+ORIGINAL="50-original"
 
 info() {
 	echo "INFO: $@" 1>&2
