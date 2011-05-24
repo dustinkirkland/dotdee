@@ -8,7 +8,7 @@ Homepage: http://launchpad.net/dotdee
 
 Package: dotdee
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, iwatch
 Description: convert a flat file to a file concatenated from a .d-style directory
  dotdee is a handy utility for converting a single flat text file to a
  symlink to a file constructed by concatenating a set of files in a

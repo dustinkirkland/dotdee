@@ -6,5 +6,8 @@ dotdee (1.0) unreleased; urgency=low
     - initial packaging
   * dotdee:
     - preserve permissions
+  * debian/control, debian/install, debian/upstart, dotdee.8, dotdee-
+    inotify-handler:
+    - add inotify support
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600

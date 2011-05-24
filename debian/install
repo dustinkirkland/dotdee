@@ -1,1 +1,2 @@
-dotdee usr/sbin
+dotdee usr/sbin/
+dotdee-inotify-handler usr/lib/dotdee/
