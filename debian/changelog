@@ -4,5 +4,7 @@ dotdee (1.0) unreleased; urgency=low
   * === added directory debian, debian/compat, debian/control,
     debian/copyright, debian/install, debian/manpages, debian/rules:
     - initial packaging
+  * dotdee:
+    - preserve permissions
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
