@@ -40,7 +40,7 @@ usage() {
 
 u_a_name() {
 	# Ensure a unique name in update-alternatives
-	echo "${1}" | sed -e "s:/:-:g" -e "s:^-\+::"
+	echo "${1}" | sed -e "s:/:%%:g" -e "s:^%\+::"
 }
 
 is_dotdee() {

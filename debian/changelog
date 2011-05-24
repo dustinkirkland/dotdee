@@ -6,6 +6,7 @@ dotdee (1.0) unreleased; urgency=low
     - initial packaging
   * dotdee:
     - preserve permissions, use function for all
+    - use "%%" to signify "/" in update-alternatives pathnames
   * debian/control, debian/install, debian/upstart, dotdee.8, dotdee-
     inotify-handler:
     - add inotify support
