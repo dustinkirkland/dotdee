@@ -9,5 +9,7 @@ dotdee (1.0) unreleased; urgency=low
   * debian/control, debian/install, debian/upstart, dotdee.8, dotdee-
     inotify-handler:
     - add inotify support
+  * debian/upstart:
+    - fix path
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
