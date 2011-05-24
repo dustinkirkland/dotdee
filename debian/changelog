@@ -11,5 +11,7 @@ dotdee (1.0-0ubuntu1) oneiric; urgency=low
     - add inotify support
   * debian/upstart:
     - fix path
+  * debian/dirs:
+    - added, needed for upstart job to work
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
