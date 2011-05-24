@@ -1,4 +1,4 @@
-dotdee (1.0-0ubuntu1) oneiric; urgency=low
+dotdee (1.0) unreleased; urgency=low
 
   * Initial release
   * === added directory debian, debian/compat, debian/control,
