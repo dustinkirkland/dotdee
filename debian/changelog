@@ -1,11 +1,11 @@
-dotdee (1.0) unreleased; urgency=low
+dotdee (1.0-0ubuntu1) oneiric; urgency=low
 
   * Initial release
   * === added directory debian, debian/compat, debian/control,
     debian/copyright, debian/install, debian/manpages, debian/rules:
     - initial packaging
   * dotdee:
-    - preserve permissions
+    - preserve permissions, use function for all
   * debian/control, debian/install, debian/upstart, dotdee.8, dotdee-
     inotify-handler:
     - add inotify support
