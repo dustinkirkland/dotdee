@@ -8,4 +8,4 @@ author "Dustin Kirkland <kirkland@ubuntu.com>"
 start on filesystem or runlevel [2345]
 stop on runlevel [!2345]
 
-exec iwatch -c "/usr/lib/dotdee/dotdee-inotify-handler '%f'" -r /etc/dotdee/
+exec iwatch -f /usr/share/dotdee/dotdee.xml -p /var/run/dotdee.pid

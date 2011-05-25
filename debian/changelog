@@ -21,5 +21,8 @@ dotdee (1.0) unreleased; urgency=low
     - added, needed for upstart job to work
   * dotdee.8:
     - add a bunch of examples
+  * debian/install, debian/upstart, dotdee.xml:
+    - use an xml configuration instead of command line, for the iwatch
+      daemon; offers more flexibility
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
