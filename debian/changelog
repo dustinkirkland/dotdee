@@ -19,5 +19,7 @@ dotdee (1.0) unreleased; urgency=low
     - drop respawn, get the quoting right
   * debian/dirs:
     - added, needed for upstart job to work
+  * dotdee.8:
+    - add a bunch of examples
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
