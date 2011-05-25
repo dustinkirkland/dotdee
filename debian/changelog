@@ -1,6 +1,7 @@
 dotdee (1.1) unreleased; urgency=low
 
-  * UNRELEASED
+  * === added directory img, img/dotdee.png:
+    - branding
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 24 May 2011 20:11:58 -0500
 
