@@ -1,4 +1,4 @@
-dotdee (1.0) unreleased; urgency=low
+dotdee (1.0-0ubuntu1) oneiric; urgency=low
 
   * Initial release
   * === added directory debian, debian/compat, debian/control,
@@ -26,4 +26,4 @@ dotdee (1.0) unreleased; urgency=low
     - use an xml configuration instead of command line, for the iwatch
       daemon; offers more flexibility
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 21 May 2011 22:06:13 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 24 May 2011 20:11:55 -0500
