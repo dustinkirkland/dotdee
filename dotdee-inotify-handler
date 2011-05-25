@@ -22,7 +22,7 @@ set -x
 case "${1}" in
 	# Only monitor the files in the dotdee-managed .d dirs
 	${DIR}/*.d/[0-9][0-9]-*)
-		FILE=$(echo "${1}" | sed -e "s:^${DIR}::" -e "s:\.d/[0-9]\+\-.*$::")
+		FILE=$(echo "${1}" | sed -e "s:^${DIR}::" -e "s:\.d/[0-9]\+.*$::")
 		# Try to update the dotdee managed configuration
 		exec dotdee --update "${FILE}"
 	;;

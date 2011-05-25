@@ -4,14 +4,16 @@ dotdee (1.0) unreleased; urgency=low
   * === added directory debian, debian/compat, debian/control,
     debian/copyright, debian/install, debian/manpages, debian/rules:
     - initial packaging
+  * debian/control, debian/install, debian/upstart, dotdee.8, dotdee-
+    inotify-handler:
+    - add inotify support
   * dotdee:
     - preserve permissions, use function for all
     - use ":" to signify "/" in update-alternatives pathnames
     - add support for executables
     - add support for .patch and .diff files
-  * debian/control, debian/install, debian/upstart, dotdee.8, dotdee-
-    inotify-handler:
-    - add inotify support
+  * dotdee-inotify-handler:
+    - relax naming requirements slightly
   * debian/upstart:
     - fix path
     - drop respawn, get the quoting right
