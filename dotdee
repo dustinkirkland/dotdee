@@ -89,18 +89,28 @@ update() {
 		# BUG: We should determine the type of file, obtain the
 		#      comment character, and prepend a header that documents that this
 		#      file is managed by dotdee(8), as a hint to humans who try to edit!
-		for i in "${DIR}/${1}.d/"*; do
-			if [ "${i}" != "${DIR}/${1}.d/${ORIGINAL}" ] && [ -x "${i}" ]; then
-				# file is not 50-original, and is executable,
-				# so by convention, feed the current state
-				# of the file as STDIN, and write STDOUT to
-				# the file
-				tmp2=$(mktemp)
-				${i} <"${tmp}" >"${tmp2}"
-				mv -f "${tmp2}" "${tmp}"
-			else
-				cat "${i}" >> "${tmp}"
-			fi
+		for i in "${DIR}/${1}.d/"[0-9]*; do
+			case "${i}" in
+				"${DIR}/${1}.d/${ORIGINAL}")
+					cat "${i}" >> "${tmp}"
+				;;
+				*.patch|*.diff)
+					patch "${tmp}" "${i}"
+				;;
+				*)
+					if [ -x "${i}" ]; then
+						# file is not 50-original, and is executable,
+						# so by convention, feed the current state
+						# of the file as STDIN, and write STDOUT to
+						# the file
+						tmp2=$(mktemp)
+						${i} <"${tmp}" >"${tmp2}"
+						mv -f "${tmp2}" "${tmp}"
+					else
+						cat "${i}" >> "${tmp}"
+					fi
+				;;
+			esac
 		done
 		mv -f "${tmp}" "$DIR/${1}"
 		sync_attrs "${DIR}/${1}.d/${ATTRS}" "$DIR/${1}"
