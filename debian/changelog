@@ -12,6 +12,7 @@ dotdee (1.0) unreleased; urgency=low
     - use ":" to signify "/" in update-alternatives pathnames
     - add support for executables
     - add support for .patch and .diff files
+    - only preserve timestamps at undo
   * dotdee-inotify-handler:
     - relax naming requirements slightly
   * debian/upstart:

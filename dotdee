@@ -50,9 +50,8 @@ is_dotdee() {
 }
 
 sync_attrs() {
-		chown --reference "${1}" "${2}"
-		chmod --reference "${1}" "${2}"
-		touch --reference "${1}" "${2}"
+	chown --reference "${1}" "${2}"
+	chmod --reference "${1}" "${2}"
 }
 
 setup() {
@@ -127,6 +126,7 @@ undo() {
 		update-alternatives --remove "${u}" "${DIR}/${1}.d/${ORIGINAL}"
 		cp -af "${DIR}/${1}.d/${ORIGINAL}" "${1}"
 		sync_attrs "${DIR}/${1}.d/${ATTRS}" "${1}"
+		touch --reference "${DIR}/${1}.d/${ATTRS}" "${1}"
 		info "[${1}] has been restored"
 		info "You may want to manually remove [${DIR}/${1}.d]"
 	else
