@@ -30,11 +30,12 @@ error() {
 
 usage() {
 	echo
-	echo "dotdee --original|--setup|--update|--undo FILENAME"
+	echo "dotdee --dir|--original|--setup|--update|--undo FILENAME"
 	echo
-	echo "  --original FILENAME	print the current location of the original file"
-	echo "  --setup FILENAME	convert FILENAME to a .d directory structure"
-	echo "  --update FILENAME	update the generated FILENAME immediately"
+	echo "  -d|--dir FILENAME	print the dotdee directory where snippets live"
+	echo "  -o|--original FILENAME	print the current location of the original file"
+	echo "  -s|--setup FILENAME	convert FILENAME to a .d directory structure"
+	echo "  -u|--update FILENAME	update the generated FILENAME immediately"
 	echo "  --undo FILENAME		undo/revert a dotdee setup"
 	echo
 }
@@ -53,6 +54,14 @@ is_dotdee() {
 sync_attrs() {
 	chown --reference "${1}" "${2}"
 	chmod --reference "${1}" "${2}"
+}
+
+directory() {
+	if is_dotdee "${1}"; then
+		echo "${DIR}/${1}.d"
+	else
+		error "[${1}] is not managed by dotdee"
+	fi
 }
 
 original() {
@@ -145,15 +154,18 @@ undo() {
 
 # Main
 case "${1}" in
-	--setup)
+	-d|--dir|--directory)
+		directory "${2}"
+	;;
+	-o|--original)
+		original "${2}"
+	;;
+	-s|--setup)
 		setup "${2}"
 	;;
-	--update)
+	-u|--update)
 		NEW=
 		update "${2}"
-	;;
-	--original)
-		original "${2}"
 	;;
 	--undo)
 		undo "${2}"
