@@ -1,4 +1,4 @@
-dotdee (1.1) unreleased; urgency=low
+dotdee (1.1-0ubuntu1) oneiric; urgency=low
 
   * === added directory img, img/dotdee.png:
     - branding
@@ -6,7 +6,7 @@ dotdee (1.1) unreleased; urgency=low
     - add a --original option; useful when someone or something (dpkg?) needs
       to modify the original file
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 24 May 2011 20:11:58 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 31 May 2011 12:30:29 -0500
 
 dotdee (1.0-0ubuntu1) oneiric; urgency=low
 
