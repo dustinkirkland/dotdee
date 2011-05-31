@@ -1,3 +1,9 @@
+dotdee (1.2) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 31 May 2011 12:30:39 -0500
+
 dotdee (1.1-0ubuntu1) oneiric; urgency=low
 
   * === added directory img, img/dotdee.png:
