@@ -17,7 +17,6 @@
 
 DIR="/etc/dotdee"
 ORIGINAL="50-original"
-ATTRS=".attrs"
 COMMENT=".comment"
 
 info() {
@@ -91,12 +90,6 @@ setup() {
 		# Create the directory and move the file
 		mkdir -p "${DIR}/${1}.d"
 		mv -f "${1}" "${DIR}/${1}.d/${ORIGINAL}"
-		# Save the owernships/permissions of the original file
-		t=$(mktemp)
-		mv -f "${t}" "${DIR}/${1}.d/${ATTRS}"
-		sync_attrs "${DIR}/${1}.d/${ORIGINAL}" "${DIR}/${1}.d/${ATTRS}"
-		# Now make the original read-only
-		chmod -w "${DIR}/${1}.d/${ORIGINAL}"
 		[ -n "${2}" ] && comment "${1}" "${2}"
 		NEW=1
 		update "${1}"
@@ -147,7 +140,10 @@ update() {
 			esac
 		done
 		mv -f "${tmp}" "$DIR/${1}"
-		sync_attrs "${DIR}/${1}.d/${ATTRS}" "$DIR/${1}"
+		# Sync owner:group and permissions
+		sync_attrs "${DIR}/${1}.d/${ORIGINAL}" "$DIR/${1}"
+		# But then remove write access, to prevent inadvertent writes to this generated file
+		chmod -w "$DIR/${1}"
 	else
 		error "[${1}] is not managed by dotdee"
 	fi
@@ -160,8 +156,6 @@ undo() {
 		update-alternatives --remove "${u}" "${DIR}/${1}"
 		update-alternatives --remove "${u}" "${DIR}/${1}.d/${ORIGINAL}"
 		cp -af "${DIR}/${1}.d/${ORIGINAL}" "${1}"
-		sync_attrs "${DIR}/${1}.d/${ATTRS}" "${1}"
-		touch --reference "${DIR}/${1}.d/${ATTRS}" "${1}"
 		info "[${1}] has been restored"
 		info "You may want to manually remove [${DIR}/${1} ${DIR}/${1}.d]"
 	else
