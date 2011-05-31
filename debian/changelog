@@ -2,6 +2,7 @@ dotdee (1.4) unreleased; urgency=low
 
   * dotdee, dotdee.8:
     - drop the maintenance of .attr;  let's just pull this from 50-original
+    - fix chmod to affect all write access
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 31 May 2011 17:34:56 -0500
 

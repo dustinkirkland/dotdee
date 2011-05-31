@@ -142,8 +142,8 @@ update() {
 		mv -f "${tmp}" "$DIR/${1}"
 		# Sync owner:group and permissions
 		sync_attrs "${DIR}/${1}.d/${ORIGINAL}" "$DIR/${1}"
-		# But then remove write access, to prevent inadvertent writes to this generated file
-		chmod -w "$DIR/${1}"
+		# But then remove all write access, to prevent inadvertent writes to this generated file
+		chmod a-w "$DIR/${1}"
 	else
 		error "[${1}] is not managed by dotdee"
 	fi
