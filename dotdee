@@ -30,8 +30,9 @@ error() {
 
 usage() {
 	echo
-	echo "dotdee --setup|--update|--undo FILENAME"
+	echo "dotdee --original|--setup|--update|--undo FILENAME"
 	echo
+	echo "  --original FILENAME	print the current location of the original file"
 	echo "  --setup FILENAME	convert FILENAME to a .d directory structure"
 	echo "  --update FILENAME	update the generated FILENAME immediately"
 	echo "  --undo FILENAME		undo/revert a dotdee setup"
@@ -52,6 +53,14 @@ is_dotdee() {
 sync_attrs() {
 	chown --reference "${1}" "${2}"
 	chmod --reference "${1}" "${2}"
+}
+
+original() {
+	if is_dotdee "${1}"; then
+		echo "${DIR}/${1}.d/${ORIGINAL}"
+	else
+		error "[${1}] is not managed by dotdee"
+	fi
 }
 
 setup() {
@@ -142,6 +151,9 @@ case "${1}" in
 	--update)
 		NEW=
 		update "${2}"
+	;;
+	--original)
+		original "${2}"
 	;;
 	--undo)
 		undo "${2}"
