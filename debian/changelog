@@ -39,6 +39,9 @@ dotdee (1.6) unreleased; urgency=low
     - respawn in case iwatch fails
   * usr/lib/dotdee/dotdee-inotify-handler:
     - update on .comment changes
+  * etc/dotdee.xml:
+    - try only sending event once; should make inotify events far less
+      frequent; testing will show if this is sufficient
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Jun 2011 13:16:05 -0500
 
