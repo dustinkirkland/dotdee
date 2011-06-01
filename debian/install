@@ -1,3 +1,2 @@
-dotdee usr/sbin/
-dotdee-inotify-handler usr/lib/dotdee/
-dotdee.xml usr/share/dotdee/
+etc/
+usr/

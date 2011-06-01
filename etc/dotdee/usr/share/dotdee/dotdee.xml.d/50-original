@@ -1,0 +1,1 @@
+    <path type="recursive" events="modify,attrib,close_write,moved_from,moved_to,move,move_self,create,delete,delete_self" alert="off" exec="/usr/lib/dotdee/dotdee-inotify-handler '%f'">/etc/dotdee</path>

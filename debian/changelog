@@ -1,6 +1,27 @@
 dotdee (1.6) unreleased; urgency=low
 
-  * UNRELEASED
+  * === added directory etc, === added directory etc/dotdee, === added
+    directory etc/dotdee/usr, === added directory etc/dotdee/usr/share,
+    === added directory etc/dotdee/usr/share/dotdee, === added directory
+    etc/dotdee/usr/share/dotdee/dotdee.xml.d, === added directory usr,
+    === added directory usr/lib, === added directory usr/lib/dotdee, ===
+    added directory usr/sbin, === added directory usr/share, === added
+    directory usr/share/icons, === added directory
+    usr/share/icons/hicolor, === added directory
+    usr/share/icons/hicolor/192x192, === added directory usr/share/man,
+    === added directory usr/share/man/man8, debian/install,
+    debian/manpages, dotdee.8 => usr/share/man/man8/dotdee.8, dotdee-
+    inotify-handler => usr/lib/dotdee/dotdee-inotify-handler, dotdee =>
+    usr/sbin/dotdee, dotdee.xml =>
+    etc/dotdee/usr/share/dotdee/dotdee.xml.d/50-original, dpkg.txt,
+    etc/dotdee/usr/share/dotdee/dotdee.xml.d/10-header,
+    etc/dotdee/usr/share/dotdee/dotdee.xml.d/90-footer,
+    etc/dotdee/usr/share/dotdee/dotdee.xml.d/.comment, img/dotdee.png =>
+    usr/share/icons/hicolor/192x192/dotdee.png, === removed directory
+    img:
+    - reorganize the layout for simpler installation
+    - scale the dotdee.png down to 192x192
+    - convert dotdee.xml to a dotdee managed file
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Jun 2011 13:16:05 -0500
 
