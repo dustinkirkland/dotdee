@@ -33,6 +33,8 @@ dotdee (1.6) unreleased; urgency=low
       and /* */
   * usr/sbin/dotdee:
     - add a bug/note about XML special case needed
+  * etc/dotdee/usr/share/dotdee/dotdee.xml.d/.comment:
+    - drop for now
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Jun 2011 13:16:05 -0500
 
