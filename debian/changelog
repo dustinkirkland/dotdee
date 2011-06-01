@@ -35,6 +35,10 @@ dotdee (1.6) unreleased; urgency=low
     usr/share/dotdee, usr/share/dotdee/dotdee.xml, etc/dotdee.xml:
     - flatten back to a single dotdee.xml
     - move it to /etc, for admin configurability
+  * debian/upstart:
+    - respawn in case iwatch fails
+  * usr/lib/dotdee/dotdee-inotify-handler:
+    - update on .comment changes
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Jun 2011 13:16:05 -0500
 
