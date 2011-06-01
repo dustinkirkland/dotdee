@@ -32,7 +32,7 @@ dotdee (1.6) unreleased; urgency=low
   * usr/sbin/dotdee:
     - add a bug/note about XML special case needed for comments
   * debian/postinst, debian/upstart, === removed directory
-    usr/share/dotdee, usr/share/dotdee/dotdee.xml:
+    usr/share/dotdee, usr/share/dotdee/dotdee.xml, etc/dotdee.xml:
     - flatten back to a single dotdee.xml
     - move it to /etc, for admin configurability
 
