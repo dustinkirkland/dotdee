@@ -31,6 +31,8 @@ dotdee (1.6) unreleased; urgency=low
   * usr/sbin/dotdee, usr/share/man/man8/dotdee.8:
     - add support for comment start and end characters, like <!-- -->
       and /* */
+  * usr/sbin/dotdee:
+    - add a bug/note about XML special case needed
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Jun 2011 13:16:05 -0500
 
