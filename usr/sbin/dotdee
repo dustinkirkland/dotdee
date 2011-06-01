@@ -18,6 +18,7 @@
 DIR="/etc/dotdee"
 ORIGINAL="50-original"
 COMMENT=".comment"
+FORCE=
 
 info() {
 	echo "INFO: $@" 1>&2
@@ -82,7 +83,7 @@ original() {
 
 setup() {
 	# Setup a file for dotdee management
-	if is_dotdee "${1}"; then
+	if is_dotdee "${1}" && [ "$FORCE" != "1" ]; then
 		error "[${1}] is already managed by dotdee"
 	else
 		# Test for applicability
@@ -175,6 +176,10 @@ case "${1}" in
 		original "${2}"
 	;;
 	-s|--setup)
+		setup "${2}" "${3}"
+	;;
+	--setup-force)
+		FORCE=1
 		setup "${2}" "${3}"
 	;;
 	-u|--update)

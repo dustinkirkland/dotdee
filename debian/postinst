@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+XML=/usr/share/dotdee/dotdee.xml
+dotdee --setup-force /usr/share/dotdee/dotdee.xml
+
+#DEBHELPER#
