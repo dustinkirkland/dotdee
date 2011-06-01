@@ -21,20 +21,20 @@ dotdee (1.6) unreleased; urgency=low
     img:
     - reorganize the layout for simpler installation
     - scale the dotdee.png down to 192x192
-    - convert dotdee.xml to a dotdee managed file
   * === added directory usr/share/dotdee, debian/postinst,
     etc/dotdee/usr/share/dotdee/dotdee.xml.d/50-original =>
     etc/dotdee/usr/share/dotdee/dotdee.xml.d/51-etcdotdee-watch,
     usr/sbin/dotdee, usr/share/dotdee/dotdee.xml:
     - add a --setup-force mode (don't document this)
-    - add a postinst that sets up dotdee.xml
   * usr/sbin/dotdee, usr/share/man/man8/dotdee.8:
     - add support for comment start and end characters, like <!-- -->
       and /* */
   * usr/sbin/dotdee:
-    - add a bug/note about XML special case needed
-  * etc/dotdee/usr/share/dotdee/dotdee.xml.d/.comment:
-    - drop for now
+    - add a bug/note about XML special case needed for comments
+  * debian/postinst, debian/upstart, === removed directory
+    usr/share/dotdee, usr/share/dotdee/dotdee.xml:
+    - flatten back to a single dotdee.xml
+    - move it to /etc, for admin configurability
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Jun 2011 13:16:05 -0500
 
