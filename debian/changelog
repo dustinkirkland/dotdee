@@ -1,6 +1,7 @@
 dotdee (1.5) unreleased; urgency=low
 
-  * UNRELEASED
+  * dotdee.xml:
+    - need moved_self
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 31 May 2011 17:55:13 -0500
 
