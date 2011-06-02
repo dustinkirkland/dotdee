@@ -1,3 +1,9 @@
+dotdee (1.7) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
+
 dotdee (1.6-0ubuntu1) oneiric; urgency=low
 
   * === added directory etc, === added directory etc/dotdee, === added
