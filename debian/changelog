@@ -1,6 +1,14 @@
 dotdee (1.7) unreleased; urgency=low
 
-  * UNRELEASED
+  * === added directory usr/share/dotdee, debian/postinst, === removed
+    directory etc/dotdee/usr, === removed directory
+    etc/dotdee/usr/share, === removed directory
+    etc/dotdee/usr/share/dotdee, === renamed directory
+    etc/dotdee/usr/share/dotdee/dotdee.xml.d => etc/dotdee/dotdee.xml.d,
+    usr/sbin/dotdee, usr/share/dotdee/watch_template:
+    - manage /etc/dotdee.xml with dotdee itself
+    - watch the managed file (symlink) for changes
+    - if the managed file changes, reinstall our dotdee managed link
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
 

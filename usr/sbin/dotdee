@@ -15,7 +15,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-DIR="/etc/dotdee"
+PKG="dotdee"
+DIR="/etc/${PKG}"
 ORIGINAL="50-original"
 COMMENT=".comment"
 FORCE=
@@ -38,6 +39,7 @@ usage() {
 	echo "  -o|--original FILENAME	print the current location of the original file"
 	echo "  -s|--setup FILENAME	convert FILENAME to a .d directory structure"
 	echo "  -u|--update FILENAME	update the generated FILENAME immediately"
+	echo "  --update-link FILENAME	only update the generated FILENAME symlink"
 	echo "  --undo FILENAME		undo/revert a dotdee setup"
 	echo
 }
@@ -49,8 +51,7 @@ u_a_name() {
 
 is_dotdee() {
 	# Is this file managed by dotdee?
-	u=$(u_a_name "${1}")
-	update-alternatives --list "${u}" 2>/dev/null | grep -qs "^${DIR}/${1}$"
+	update-alternatives --list "${HANDLE}" 2>/dev/null | grep -qs "^${DIR}/${1}$"
 }
 
 sync_attrs() {
@@ -82,6 +83,21 @@ original() {
 	fi
 }
 
+stop_dotdee() {
+	info "Stopping ${PKG}..."
+	status "${PKG}" >/dev/null 2>&1 && stop "${PKG}" || true
+}
+
+start_dotdee() {
+	info "Starting ${PKG}..."
+	start "${PKG}"
+}
+
+restart_dotdee() {
+	stop_dotdee
+	start_dotdee
+}
+
 setup() {
 	# Setup a file for dotdee management
 	if is_dotdee "${1}" && [ "$FORCE" != "1" ]; then
@@ -96,12 +112,26 @@ setup() {
 		NEW=1
 		update "${1}"
 		# Re-establish links to file
-		u=$(u_a_name "${1}")
 		# Establish update-alternatives link at a higher priority to the generated one
-		update-alternatives --install "${1}" "${u}" "$DIR/${1}" 50
+		update-alternatives --install "${1}" "${HANDLE}" "$DIR/${1}" 50
 		# Establish update-alternatives link at a lower priority to the original one
-		update-alternatives --install "${1}" "${u}" "$DIR/${1}.d/${ORIGINAL}" 20
+		update-alternatives --install "${1}" "${HANDLE}" "$DIR/${1}.d/${ORIGINAL}" 20
+		t=$(mktemp)
+		d=$(dirname "${1}")
+		b=$(basename "${1}")
+		sed -e "s@___DIRNAME___@${d}@g" -e "s@___BASENAME___@${b}@g" /usr/share/dotdee/watch_template > "${t}"
+		mv -f "${t}" "${DIR}/etc/dotdee.xml.d/60-${HANDLE}"
+		restart_dotdee
 	fi
+}
+
+update_link() {
+	# Must stop dotdee momentarily while we update the managed file's symlink,
+	# or else we may descend into some nasty inotify recursion!
+	stop_dotdee
+	  rm -f "${1}"
+	  update-alternatives --install "${1}" "${HANDLE}" "${DIR}/${1}" 50 >/dev/null 2>&1
+	start_dotdee
 }
 
 update() {
@@ -149,11 +179,14 @@ update() {
 				;;
 			esac
 		done
-		mv -f "${tmp}" "$DIR/${1}"
 		# Sync owner:group and permissions
-		sync_attrs "${DIR}/${1}.d/${ORIGINAL}" "$DIR/${1}"
+		sync_attrs "${DIR}/${1}.d/${ORIGINAL}" "${tmp}"
 		# But then remove all write access, to prevent inadvertent writes to this generated file
-		chmod a-w "$DIR/${1}"
+		chmod a-w "${tmp}"
+		# Update the symlink, just in case ...
+		mv -f "${tmp}" "$DIR/${1}"
+		update_link "${1}"
+		info "[${1}] updated by dotdee"
 	else
 		error "[${1}] is not managed by dotdee"
 	fi
@@ -162,9 +195,10 @@ update() {
 undo() {
 	# Undo a dotdee setup
 	if is_dotdee "${1}"; then
-		u=$(u_a_name "${1}")
-		update-alternatives --remove "${u}" "${DIR}/${1}"
-		update-alternatives --remove "${u}" "${DIR}/${1}.d/${ORIGINAL}"
+		rm -f "$DIR/etc/dotdee.xml.d/60-${HANDLE}"
+		restart_dotdee
+		update-alternatives --remove "${HANDLE}" "${DIR}/${1}"
+		update-alternatives --remove "${HANDLE}" "${DIR}/${1}.d/${ORIGINAL}"
 		cp -af "${DIR}/${1}.d/${ORIGINAL}" "${1}"
 		info "[${1}] has been restored"
 		info "You may want to manually remove [${DIR}/${1} ${DIR}/${1}.d]"
@@ -174,6 +208,7 @@ undo() {
 }
 
 # Main
+HANDLE=$(u_a_name "${2}")
 case "${1}" in
 	-c|--comment)
 		comment "${2}" "${3}" "${4}"
@@ -194,6 +229,9 @@ case "${1}" in
 	-u|--update)
 		NEW=
 		update "${2}"
+	;;
+	--update-link)
+		update_link "${2}"
 	;;
 	--undo)
 		undo "${2}"
