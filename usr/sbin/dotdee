@@ -19,6 +19,7 @@ PKG="dotdee"
 DIR="/etc/${PKG}"
 ORIGINAL="50-original"
 COMMENT=".comment"
+
 FORCE=
 
 info() {
@@ -59,7 +60,7 @@ managed_path() {
 	#  - leading $DIR
 	#  - trailing ".d"
 	#  - trailing ".d/*"
-	echo "${1}" | sed -e "s:/\+:/:g" -e "s:^${DIR}::" -e "s:\.d$::" -e "s:\.d/[^/]*$::g"
+	echo "${1}" | sed -e "s:/\+:/:g" -e "s:^${DIR}/:/:" -e "s:\.d$::" -e "s:\.d/[^/]*$::g"
 }
 
 is_dotdee() {
@@ -98,12 +99,12 @@ original() {
 
 stop_dotdee() {
 	info "Stopping ${PKG}..."
-	status "${PKG}" >/dev/null 2>&1 && stop "${PKG}" || true
+	/sbin/status "${PKG}" >/dev/null 2>&1 && /sbin/stop "${PKG}" || true
 }
 
 start_dotdee() {
 	info "Starting ${PKG}..."
-	start "${PKG}"
+	/sbin/start "${PKG}"
 }
 
 restart_dotdee() {
@@ -134,7 +135,7 @@ setup() {
 		b=$(basename "${1}")
 		sed -e "s@___DIRNAME___@${d}@g" -e "s@___BASENAME___@${b}@g" /usr/share/dotdee/watch_template > "${t}"
 		mv -f "${t}" "${DIR}/etc/dotdee.xml.d/60-${HANDLE}"
-		restart dotdee
+		restart_dotdee
 	fi
 }
 
@@ -143,12 +144,14 @@ link_ok() {
 	case "${f}" in
 		${DIR}${1}|${DIR}/${1})
 			# No need to update; already correct
-			info "[${1}] -> [${f}]"
-			true
+			info "[${1}] -> [${f}] is correct"
+			return 0
+		;;
+		*)
+			info "[${1}] -> [${f}] is incorrect"
+			return 1
 		;;
 	esac
-	info "[${1}] -> [${f}] is incorrect"
-	false
 }
 
 update_link() {
@@ -219,8 +222,9 @@ update_contents() {
 }
 
 update() {
-	update_contents "${1}"
 	update_link "${1}"
+	update_contents "${1}"
+	[ "${1}" = "/etc/dotdee.xml" ] && restart_dotdee || true
 }
 
 undo() {
@@ -268,7 +272,7 @@ handle_inotify() {
 		;;
 		${DIR}/*)
 			# Dereferenced dotdee link; strip leading dir
-			f=${1#${DIR}}
+			f=$(managed_path "${1}")
 			if is_dotdee "${f}"; then
 				# Link is correct; check/update contents
 				contents_ok || update_contents "${f}"
@@ -277,12 +281,12 @@ handle_inotify() {
 		*)
 			if is_dotdee "${1}"; then
 				# Check/update link
-				link_ok || update_link "${1}"
+				link_ok "${1}" || update_link "${1}"
 				# Check/update contents
-				contents_ok || update_contents "${1}"
+				contents_ok "${1}" || update_contents "${1}"
 			fi
 		;;
-esac
+	esac
 }
 
 # Main
