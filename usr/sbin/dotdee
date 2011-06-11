@@ -36,6 +36,7 @@ usage() {
 	echo
 	echo "  -c|--comment FILENAME COMMENT_DELIM set the file comment delimiter"
 	echo "  -d|--dir FILENAME	print the dotdee directory where snippets live"
+	echo "  --handle-inotify	inotify handler procedures"
 	echo "  -l|--list [FILENAME]	list dotdee managed paths"
 	echo "  -o|--original FILENAME	print the current location of the original file"
 	echo "  -s|--setup FILENAME	convert FILENAME to a .d directory structure"
@@ -49,6 +50,15 @@ usage() {
 u_a_name() {
 	# Ensure a unique name in update-alternatives
 	echo "${1}" | sed -e "s%/%:%g" -e "s%^:\+%%"
+}
+
+managed_path() {
+	# Best to keep this code in one place; strip:
+	#  - duplicate "/"
+	#  - leading $DIR
+	#  - trailing ".d"
+	#  - trailing ".d/*"
+	echo "${1}" | sed -e "s:/\+:/:g" -e "s:^${DIR}::" -e "s:\.d$::" -e "s:\.d/[^/]*$::g"
 }
 
 is_dotdee() {
@@ -127,8 +137,24 @@ setup() {
 	fi
 }
 
+link_ok() {
+	f=$(readlink -f "${1}")
+	case "${f}" in
+		${DIR}${1}|${DIR}/${1})
+			# No need to update; already correct
+			info "[${1}] -> [${f}]"
+			true
+		;;
+	esac
+	false
+}
+
 update_link() {
 	update-alternatives --install "${1}" "${HANDLE}" "${DIR}/${1}" 50 >/dev/null 2>&1
+}
+
+contents_ok() {
+	md5sum -c "/var/lib/${PKG}/${HANDLE}"
 }
 
 update_contents() {
@@ -219,14 +245,42 @@ list() {
 		fi
 	else
 		# List all dotdee managed paths
-		for i in $(find "${DIR}" -type d -name "*.d" | sed -e "s:^${DIR}::" -e "s:\.d$::"); do
-			case "$(readlink -f "${i}")" in
+		for i in $(find "${DIR}" -type d -name "*.d"); do
+			f=$(managed_path "${i}")
+			case "$(readlink -f "${f}")" in
 				${DIR}/*)
-					echo "${i}"
+					echo "${f}"
 				;;
 			esac
 		done
 	fi
+}
+
+handle_inotify() {
+	case "${1}" in
+		# Files in an /etc/dotdee/*.d dir changed
+		${DIR}/*.d/[0-9]*|${DIR}/*.d/.comment)
+			f=$(managed_path "${1}")
+			# Update the managed file
+			update "${f}"
+		;;
+		${DIR}/*)
+			# Dereferenced dotdee link; strip leading dir
+			f=${1#${DIR}}
+			if is_dotdee "${1}"; then
+				# Link is correct; check/update contents
+				contents_ok || update_contents "${f}"
+			fi
+		;;
+		*)
+			if is_dotdee "${1}"; then
+				# Check/update link
+				link_ok || update_link "${1}"
+				# Check/update contents
+				contents_ok || update_contents "${1}"
+			fi
+		;;
+esac
 }
 
 # Main
@@ -237,6 +291,9 @@ case "${1}" in
 	;;
 	-d|--dir|--directory)
 		directory "${2}"
+	;;
+	--handle-inotify)
+		handle_inotify "${2}"
 	;;
 	-l|--list)
 		list "${2}"

@@ -1,6 +1,11 @@
 #!/bin/sh -e
 #
 #    dotdee-inotify-handler - handle dotdee's inotify events
+#
+#    NOTE: THIS SCRIPT IS DEPRECATED BY:
+#      dotdee --handle-inotify
+#    AND IS PROVIDED FOR COMPATIBILITY PURPOSES ONLY!!!
+#
 #    Copyright (C) 2011 Dustin Kirkland <kirkland@ubuntu.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,53 +21,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 PKG="dotdee"
-DIR="/etc/${PKG}"
-
-set -x
-
-update_link() {
-	# Check and update link if necessary
-	case "$(readlink -f ${1})" in
-		${DIR}${1})
-			true
-		;;
-		*)
-			exec dotdee --update-link "${1}"
-		;;
-	esac
-}
-
-update_contents() {
-		# Check and update contents if necessary
-		HANDLE=$(echo "${1}" | sed -e "s%/%:%g" -e "s%^:\+%%")
-		if md5sum -c "/var/lib/${PKG}/${HANDLE}"; then
-			true
-		else
-			exec dotdee --update-contents "${1}"
-		fi
-}
-
-case "${1}" in
-	# Files in a constituent .d dir changed
-	${DIR}/*.d/[0-9]*|${DIR}/*.d/.comment)
-		FILE=$(echo "${1}" | sed -e "s:^${DIR}::" -e "s:\.d/[0-9\.]\+.*$::")
-		# Try to update the dotdee managed configuration
-		exec dotdee --update "${FILE}"
-	;;
-	${DIR}/*)
-		# We've been passed the dereferenced dotdee link, strip leading dotdee dir
-		f=${1#${DIR}}
-		if dotdee -l "${f}" >/dev/null 2>&1; then
-			# Link is already correct, check/update contents
-			update_contents "${f}"
-		fi
-	;;
-	*)
-		if dotdee -l "${1}" >/dev/null 2>&1; then
-			# Check/update link
-			update_link "${1}"
-			# Check/update contents
-			update_contents "${1}"
-		fi
-	;;
-esac
+exec ${PKG} --handle-inotify "${1}"

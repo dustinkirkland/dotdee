@@ -16,6 +16,10 @@ dotdee (1.7) unreleased; urgency=low
     usr/lib/dotdee/dotdee-inotify-handler, usr/sbin/dotdee,
     usr/share/dotdee/watch_template, usr/share/man/man8/dotdee.8:
     - add update-link, update-contents, list methods
+  * usr/lib/dotdee/dotdee-inotify-handler, usr/sbin/dotdee:
+    - move the inotify handling code into dotdee itself, which already
+      has several helper functions; should improve performance for
+      inotify handling situations
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
 
