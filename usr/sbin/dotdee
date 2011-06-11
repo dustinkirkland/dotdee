@@ -49,7 +49,8 @@ usage() {
 
 u_a_name() {
 	# Ensure a unique name in update-alternatives
-	echo "${1}" | sed -e "s%/%:%g" -e "s%^:\+%%"
+	f=$(managed_path "${1}")
+	echo "${f}" | sed -e "s%/%:%g" -e "s%^:\+%%"
 }
 
 managed_path() {
@@ -146,6 +147,7 @@ link_ok() {
 			true
 		;;
 	esac
+	info "[${1}] -> [${f}] is incorrect"
 	false
 }
 
@@ -267,7 +269,7 @@ handle_inotify() {
 		${DIR}/*)
 			# Dereferenced dotdee link; strip leading dir
 			f=${1#${DIR}}
-			if is_dotdee "${1}"; then
+			if is_dotdee "${f}"; then
 				# Link is correct; check/update contents
 				contents_ok || update_contents "${f}"
 			fi
@@ -284,6 +286,7 @@ esac
 }
 
 # Main
+#set -x
 HANDLE=$(u_a_name "${2}")
 case "${1}" in
 	-c|--comment)

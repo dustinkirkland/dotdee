@@ -20,6 +20,10 @@ dotdee (1.7) unreleased; urgency=low
     - move the inotify handling code into dotdee itself, which already
       has several helper functions; should improve performance for
       inotify handling situations
+  * usr/sbin/dotdee, usr/share/dotdee/watch_template:
+    - fixup a couple of minor bugs around canonicalizing the path and
+      handle
+    - update the template to use --handle-inotify
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
 
