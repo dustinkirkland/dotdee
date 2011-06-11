@@ -9,6 +9,13 @@ dotdee (1.7) unreleased; urgency=low
     - manage /etc/dotdee.xml with dotdee itself
     - watch the managed file (symlink) for changes
     - if the managed file changes, reinstall our dotdee managed link
+  * === added directory etc/dotdee/etc, debian/postinst,
+    etc/dotdee/dotdee.xml.d/51-etcdotdee-watch =>
+    etc/dotdee/etc/dotdee.xml.d/51-main, === renamed directory
+    etc/dotdee/dotdee.xml.d => etc/dotdee/etc/dotdee.xml.d,
+    usr/lib/dotdee/dotdee-inotify-handler, usr/sbin/dotdee,
+    usr/share/dotdee/watch_template, usr/share/man/man8/dotdee.8:
+    - add update-link, update-contents, list methods
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
 

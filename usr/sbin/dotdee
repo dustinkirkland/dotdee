@@ -36,10 +36,12 @@ usage() {
 	echo
 	echo "  -c|--comment FILENAME COMMENT_DELIM set the file comment delimiter"
 	echo "  -d|--dir FILENAME	print the dotdee directory where snippets live"
+	echo "  -l|--list [FILENAME]	list dotdee managed paths"
 	echo "  -o|--original FILENAME	print the current location of the original file"
 	echo "  -s|--setup FILENAME	convert FILENAME to a .d directory structure"
 	echo "  -u|--update FILENAME	update the generated FILENAME immediately"
 	echo "  --update-link FILENAME	only update the generated FILENAME symlink"
+	echo "  --update-contents FILENAME only update the contents of FILENAME"
 	echo "  --undo FILENAME		undo/revert a dotdee setup"
 	echo
 }
@@ -100,7 +102,7 @@ restart_dotdee() {
 
 setup() {
 	# Setup a file for dotdee management
-	if is_dotdee "${1}" && [ "$FORCE" != "1" ]; then
+	if is_dotdee "${1}" && [ "${FORCE}" != "1" ]; then
 		error "[${1}] is already managed by dotdee"
 	else
 		# Test for applicability
@@ -121,20 +123,15 @@ setup() {
 		b=$(basename "${1}")
 		sed -e "s@___DIRNAME___@${d}@g" -e "s@___BASENAME___@${b}@g" /usr/share/dotdee/watch_template > "${t}"
 		mv -f "${t}" "${DIR}/etc/dotdee.xml.d/60-${HANDLE}"
-		restart_dotdee
+		restart dotdee
 	fi
 }
 
 update_link() {
-	# Must stop dotdee momentarily while we update the managed file's symlink,
-	# or else we may descend into some nasty inotify recursion!
-	stop_dotdee
-	  rm -f "${1}"
-	  update-alternatives --install "${1}" "${HANDLE}" "${DIR}/${1}" 50 >/dev/null 2>&1
-	start_dotdee
+	update-alternatives --install "${1}" "${HANDLE}" "${DIR}/${1}" 50 >/dev/null 2>&1
 }
 
-update() {
+update_contents() {
 	# Construct the file via concatenation
 	if is_dotdee "${1}" || [ "${NEW}" = 1 ]; then
 		tmp=$(mktemp)
@@ -183,20 +180,25 @@ update() {
 		sync_attrs "${DIR}/${1}.d/${ORIGINAL}" "${tmp}"
 		# But then remove all write access, to prevent inadvertent writes to this generated file
 		chmod a-w "${tmp}"
-		# Update the symlink, just in case ...
-		mv -f "${tmp}" "$DIR/${1}"
-		update_link "${1}"
+		mv -f "${tmp}" "${DIR}/${1}"
+		# Store a checksum of the contents, in order to detect changes
+		mkdir -p "/var/lib/${PKG}"
+		md5sum "${DIR}/${1}" > "/var/lib/${PKG}/${HANDLE}"
 		info "[${1}] updated by dotdee"
 	else
 		error "[${1}] is not managed by dotdee"
 	fi
 }
 
+update() {
+	update_contents "${1}"
+	update_link "${1}"
+}
+
 undo() {
 	# Undo a dotdee setup
 	if is_dotdee "${1}"; then
 		rm -f "$DIR/etc/dotdee.xml.d/60-${HANDLE}"
-		restart_dotdee
 		update-alternatives --remove "${HANDLE}" "${DIR}/${1}"
 		update-alternatives --remove "${HANDLE}" "${DIR}/${1}.d/${ORIGINAL}"
 		cp -af "${DIR}/${1}.d/${ORIGINAL}" "${1}"
@@ -204,6 +206,26 @@ undo() {
 		info "You may want to manually remove [${DIR}/${1} ${DIR}/${1}.d]"
 	else
 		error "[${1}] is not managed by dotdee"
+	fi
+}
+
+list() {
+	if [ -n "${1}" ]; then
+		if is_dotdee "${1}"; then
+			echo "${1}"
+		else
+			error "[${1}] is not managed by ${PKG}"
+			exit 1
+		fi
+	else
+		# List all dotdee managed paths
+		for i in $(find "${DIR}" -type d -name "*.d" | sed -e "s:^${DIR}::" -e "s:\.d$::"); do
+			case "$(readlink -f "${i}")" in
+				${DIR}/*)
+					echo "${i}"
+				;;
+			esac
+		done
 	fi
 }
 
@@ -215,6 +237,9 @@ case "${1}" in
 	;;
 	-d|--dir|--directory)
 		directory "${2}"
+	;;
+	-l|--list)
+		list "${2}"
 	;;
 	-o|--original)
 		original "${2}"
@@ -229,6 +254,9 @@ case "${1}" in
 	-u|--update)
 		NEW=
 		update "${2}"
+	;;
+	--update-contents)
+		update_contents "${2}"
 	;;
 	--update-link)
 		update_link "${2}"

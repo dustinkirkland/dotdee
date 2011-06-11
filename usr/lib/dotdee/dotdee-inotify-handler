@@ -15,18 +15,54 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-DIR="/etc/dotdee"
+PKG="dotdee"
+DIR="/etc/${PKG}"
 
 set -x
 
+update_link() {
+	# Check and update link if necessary
+	case "$(readlink -f ${1})" in
+		${DIR}${1})
+			true
+		;;
+		*)
+			exec dotdee --update-link "${1}"
+		;;
+	esac
+}
+
+update_contents() {
+		# Check and update contents if necessary
+		HANDLE=$(echo "${1}" | sed -e "s%/%:%g" -e "s%^:\+%%")
+		if md5sum -c "/var/lib/${PKG}/${HANDLE}"; then
+			true
+		else
+			exec dotdee --update-contents "${1}"
+		fi
+}
+
 case "${1}" in
-	# Only monitor the files in the dotdee-managed .d dirs
+	# Files in a constituent .d dir changed
 	${DIR}/*.d/[0-9]*|${DIR}/*.d/.comment)
 		FILE=$(echo "${1}" | sed -e "s:^${DIR}::" -e "s:\.d/[0-9\.]\+.*$::")
 		# Try to update the dotdee managed configuration
 		exec dotdee --update "${FILE}"
 	;;
+	${DIR}/*)
+		# We've been passed the dereferenced dotdee link, strip leading dotdee dir
+		f=${1#${DIR}}
+		if dotdee -l "${f}" >/dev/null 2>&1; then
+			# Link is already correct, check/update contents
+			update_contents "${f}"
+		fi
+	;;
 	*)
-		exit 0
+		if dotdee -l "${1}" >/dev/null 2>&1; then
+			# Check/update link
+			update_link "${1}"
+			# Check/update contents
+			update_contents "${1}"
+		fi
 	;;
 esac
