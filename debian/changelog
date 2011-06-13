@@ -1,4 +1,4 @@
-dotdee (1.7) unreleased; urgency=low
+dotdee (1.7-0ubuntu1) oneiric; urgency=low
 
   * === added directory usr/share/dotdee, debian/postinst, === removed
     directory etc/dotdee/usr, === removed directory
@@ -28,7 +28,7 @@ dotdee (1.7) unreleased; urgency=low
     - get dotdee restarting when /etc/dotdee.xml changes
     - clean up restart procedures
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 13 Jun 2011 00:12:23 -0500
 
 dotdee (1.6-0ubuntu1) oneiric; urgency=low
 
