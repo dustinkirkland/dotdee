@@ -26,6 +26,7 @@ dotdee (1.7) unreleased; urgency=low
     - update the template to use --handle-inotify
   * etc/dotdee/etc/dotdee.xml.d/51-main, usr/sbin/dotdee:
     - get dotdee restarting when /etc/dotdee.xml changes
+    - clean up restart procedures
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 02 Jun 2011 15:06:33 -0400
 

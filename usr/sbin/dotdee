@@ -97,19 +97,8 @@ original() {
 	fi
 }
 
-stop_dotdee() {
-	info "Stopping ${PKG}..."
-	/sbin/status "${PKG}" >/dev/null 2>&1 && /sbin/stop "${PKG}" || true
-}
-
-start_dotdee() {
-	info "Starting ${PKG}..."
-	/sbin/start "${PKG}"
-}
-
 restart_dotdee() {
-	stop_dotdee
-	start_dotdee
+	/sbin/restart "${PKG}" || /sbin/start "${PKG}"
 }
 
 setup() {
@@ -224,7 +213,7 @@ update_contents() {
 update() {
 	update_link "${1}"
 	update_contents "${1}"
-	[ "${1}" = "/etc/dotdee.xml" ] && restart_dotdee || true
+	[ "${1}" = "/etc/dotdee.xml" ] && restart_dotdee "${PKG}" || true
 }
 
 undo() {
