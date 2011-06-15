@@ -1,14 +1,8 @@
 #!/bin/sh -e
 
 XML="/etc/dotdee.xml"
-if dotdee --dir "${XML}" >/dev/null 2>&1; then
-	# Force an update and a restart of dotdee
-	touch "${XML}"
-	dotdee --update "${XML}"
-else
-	# Do the initial setup of dotdee.xml
-	touch "${XML}"
-	dotdee --setup "${XML}"
-fi
+touch "${XML}"
+dotdee --setup "${XML}" || true
+dotdee --update "${XML}"
 
 #DEBHELPER#

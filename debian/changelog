@@ -1,6 +1,10 @@
 dotdee (1.8) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/postinst, usr/sbin/dotdee:
+    - fix some installation time breakage
+    - must update the contents, before the link, else update-alternatives
+      fails
+    - simplify the postinst /etc/dotdee.xml setup logic for idempotence
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 13 Jun 2011 00:12:27 -0500
 

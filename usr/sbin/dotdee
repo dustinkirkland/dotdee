@@ -211,8 +211,8 @@ update_contents() {
 }
 
 update() {
-	update_link "${1}"
 	update_contents "${1}"
+	update_link "${1}"
 	[ "${1}" = "/etc/dotdee.xml" ] && restart_dotdee "${PKG}" || true
 }
 
