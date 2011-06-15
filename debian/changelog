@@ -1,4 +1,4 @@
-dotdee (1.8) unreleased; urgency=low
+dotdee (1.8-0ubuntu1) oneiric; urgency=low
 
   * debian/postinst, usr/sbin/dotdee:
     - fix some installation time breakage
@@ -6,7 +6,7 @@ dotdee (1.8) unreleased; urgency=low
       fails
     - simplify the postinst /etc/dotdee.xml setup logic for idempotence
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 13 Jun 2011 00:12:27 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jun 2011 10:28:40 -0500
 
 dotdee (1.7-0ubuntu1) oneiric; urgency=low
 
