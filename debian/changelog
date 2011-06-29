@@ -1,13 +1,10 @@
-dotdee (1.9) unreleased; urgency=low
-
-  [ Dustin Kirkland ]
-  * UNRELEASED
+dotdee (1.9-0ubuntu1) oneiric; urgency=low
 
   [ Juan L. Negron ]
   * etc/dotdee.xml:
-  - Original dotdee.xml file needs to be empty
+  - Original dotdee.xml file needs to not be installed as a conffile
 
- -- Juan L. Negron <juan@ubuntu.com>  Tue, 28 Jun 2011 16:29:37 +0100
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Jun 2011 02:30:17 +0000
 
 dotdee (1.8-0ubuntu1) oneiric; urgency=low
 
