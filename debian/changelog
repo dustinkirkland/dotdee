@@ -1,8 +1,13 @@
 dotdee (1.9) unreleased; urgency=low
 
+  [ Dustin Kirkland ]
   * UNRELEASED
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Jun 2011 10:28:43 -0500
+  [ Juan L. Negron ]
+  * etc/dotdee.xml:
+  - Original dotdee.xml file needs to be empty
+
+ -- Juan L. Negron <juan@ubuntu.com>  Tue, 28 Jun 2011 16:29:37 +0100
 
 dotdee (1.8-0ubuntu1) oneiric; urgency=low
 
