@@ -1,0 +1,4 @@
+# Enable/disable dotdee's use of inotify for watching for
+# changes to configuration .d directories
+# Set INOTIFY=1 to enable, or anything else to disable
+INOTIFY=1

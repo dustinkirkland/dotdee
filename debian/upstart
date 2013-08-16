@@ -10,4 +10,9 @@ stop on runlevel [!2345]
 
 respawn
 
-exec iwatch -f /etc/dotdee.xml -p /var/run/dotdee.pid
+script
+	. /etc/default/dotdee
+	if [ "$INOTIFY" = "1" ]; then
+		exec iwatch -f /etc/dotdee.xml -p /var/run/dotdee.pid
+	fi
+end script

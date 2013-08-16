@@ -1,6 +1,8 @@
 dotdee (1.10) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/default, debian/upstart: LP: #993503
+    - provide an easy mechanism for diabling inotify
+      vi configuration
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Jun 2011 02:30:21 +0000
 
