@@ -1,4 +1,4 @@
-dotdee (1.10) unreleased; urgency=low
+dotdee (1.10-0ubuntu1) saucy; urgency=low
 
   * Packaged and released for upload to Debian, closes: #719691
   * debian/default, debian/upstart: LP: #993503
@@ -9,7 +9,7 @@ dotdee (1.10) unreleased; urgency=low
     - add uploader, László Böszörményi (GCS) <gcs@debian.org>
     - fix lintian error
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 13:45:43 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 14:03:20 -0500
 
 dotdee (1.9-0ubuntu1) oneiric; urgency=low
 
