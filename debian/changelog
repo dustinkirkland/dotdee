@@ -1,3 +1,9 @@
+dotdee (1.11) unreleased; urgency=low
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 14:03:25 -0500
+
 dotdee (1.10-0ubuntu1) saucy; urgency=low
 
   * Packaged and released for upload to Debian, closes: #719691
