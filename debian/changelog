@@ -7,6 +7,7 @@ dotdee (1.10) unreleased; urgency=low
   * debian/control:
     - bump standards
     - add uploader, László Böszörményi (GCS) <gcs@debian.org>
+    - fix lintian error
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 13:45:43 -0500
 
