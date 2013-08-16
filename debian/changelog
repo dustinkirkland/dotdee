@@ -1,8 +1,12 @@
 dotdee (1.10) unreleased; urgency=low
 
+  * Packaged and released for upload to Debian, closes: #719691
   * debian/default, debian/upstart: LP: #993503
     - provide an easy mechanism for diabling inotify
       vi configuration
+  * debian/control:
+    - bump standards
+    - add uploader, László Böszörményi (GCS) <gcs@debian.org>
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Jun 2011 02:30:21 +0000
 
