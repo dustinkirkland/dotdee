@@ -1,4 +1,4 @@
-dotdee (1.11) unreleased; urgency=low
+dotdee (1.11-0ubuntu1) saucy; urgency=low
 
   [ Laszlo Boszormenyi ]
   * debian/control, debian/copyright, debian/dirs, debian/rules:
@@ -8,7 +8,7 @@ dotdee (1.11) unreleased; urgency=low
     - drop unecessary dirs file
     - specify rules format
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 14:03:25 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 21 Aug 2013 16:51:12 -0500
 
 dotdee (1.10-0ubuntu1) saucy; urgency=low
 
