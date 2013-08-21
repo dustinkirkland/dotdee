@@ -2,7 +2,7 @@ Source: dotdee
 Section: admin
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
-Uploaders: László Böszörményi (GCS) <gcs@debian.org>
+Uploaders: Laszlo Boszormenyi (GCS) <gcs@debian.org>
 Build-Depends: debhelper (>= 7)
 Standards-Version: 3.9.4
 Homepage: http://launchpad.net/dotdee

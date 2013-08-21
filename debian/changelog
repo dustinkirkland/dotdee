@@ -1,6 +1,12 @@
 dotdee (1.11) unreleased; urgency=low
 
-  * UNRELEASED
+  [ Laszlo Boszormenyi ]
+  * debian/control, debian/copyright, debian/dirs, debian/rules:
+    - fixes for Debian
+    - remove accented characters
+    - use DEP5 copyright format
+    - drop unecessary dirs file
+    - specify rules format
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 14:03:25 -0500
 
@@ -12,7 +18,7 @@ dotdee (1.10-0ubuntu1) saucy; urgency=low
       vi configuration
   * debian/control:
     - bump standards
-    - add uploader, László Böszörményi (GCS) <gcs@debian.org>
+    - add uploader, Laszlo Boszormenyi (GCS) <gcs@debian.org>
     - fix lintian error
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 16 Aug 2013 14:03:20 -0500
