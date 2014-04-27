@@ -1,6 +1,7 @@
 dotdee (1.12) unreleased; urgency=low
 
-  * UNRELEASED
+  * usr/sbin/dotdee:
+    - name our temp directories
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 21 Aug 2013 16:51:14 -0500
 

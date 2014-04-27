@@ -74,7 +74,7 @@ sync_attrs() {
 }
 
 comment() {
-	local tmp=$(mktemp)
+	local tmp=$(mktemp /tmp/${PKG}-XXXXXXXX)
 	echo "${2}" > "${tmp}"
 	[ -n "${3}" ] && echo "${3}" >> "${tmp}"
 	mv -f "${tmp}" "${DIR}/${1}.d/${COMMENT}"
@@ -119,7 +119,7 @@ setup() {
 		update-alternatives --install "${1}" "${HANDLE}" "$DIR/${1}" 50
 		# Establish update-alternatives link at a lower priority to the original one
 		update-alternatives --install "${1}" "${HANDLE}" "$DIR/${1}.d/${ORIGINAL}" 20
-		t=$(mktemp)
+		t=$(mktemp /tmp/${PKG}-XXXXXXXX)
 		d=$(dirname "${1}")
 		b=$(basename "${1}")
 		sed -e "s@___DIRNAME___@${d}@g" -e "s@___BASENAME___@${b}@g" /usr/share/dotdee/watch_template > "${t}"
@@ -154,7 +154,7 @@ contents_ok() {
 update_contents() {
 	# Construct the file via concatenation
 	if is_dotdee "${1}" || [ "${NEW}" = 1 ]; then
-		tmp=$(mktemp)
+		tmp=$(mktemp /tmp/${PKG}-XXXXXXXX)
 		# Conditionally add the comment header to the beginning of the generated file.
 		# BUG: XML will need special handling, as comments cannot come before the doc type header
 		if [ -f "${DIR}/${1}.d/${COMMENT}" ]; then
@@ -187,7 +187,7 @@ update_contents() {
 						# so by convention, feed the current state
 						# of the file as STDIN, and write STDOUT to
 						# the file
-						tmp2=$(mktemp)
+						tmp2=$(mktemp /tmp/${PKG}-XXXXXXXX)
 						${i} <"${tmp}" >"${tmp2}"
 						mv -f "${tmp2}" "${tmp}"
 					else
