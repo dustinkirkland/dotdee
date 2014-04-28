@@ -1,9 +1,9 @@
-dotdee (1.12) unreleased; urgency=low
+dotdee (1.12-0ubuntu1) utopic; urgency=low
 
   * usr/sbin/dotdee:
     - name our temp directories
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 21 Aug 2013 16:51:14 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Apr 2014 09:40:22 -0700
 
 dotdee (1.11-0ubuntu1) saucy; urgency=low
 
