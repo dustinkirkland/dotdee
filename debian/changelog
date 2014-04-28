@@ -1,3 +1,9 @@
+dotdee (1.13) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Apr 2014 09:40:27 -0700
+
 dotdee (1.12-0ubuntu1) utopic; urgency=low
 
   * usr/sbin/dotdee:
