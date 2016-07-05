@@ -1,0 +1,9 @@
+[Unit]
+Description=Dotdee to convert directories into dynamically generated files
+
+[Service]
+EnvironmentFile=-/etc/default/dotdee
+ExecStart=/usr/bin/iwatch -f /etc/dotdee.xml -p /var/run/dotdee.pid
+
+[Install]
+WantedBy=multi-user.target
