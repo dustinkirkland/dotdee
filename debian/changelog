@@ -1,6 +1,9 @@
 dotdee (1.13) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Martin Pitt ]
+  * debian/init: Drop Default-Stop: levels, the script does not do anything on
+    shutdown.
+  * Rebuild with current debhelper to drop sysv-rc dependency.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Apr 2014 09:40:27 -0700
 
