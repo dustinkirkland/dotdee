@@ -1,0 +1,41 @@
+#!/bin/sh
+# Start/stop dotdee daemon
+# chkconfig: 2345 60 80
+
+### BEGIN INIT INFO
+# Provides:          dotdee
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Converting a flatfile into a dynamically generated file.
+# Description:       It is generated from a .d directory.
+### END INIT INFO
+
+# Get LSB functions
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+            echo "Starting dotdee..."
+        [ -f /etc/default/dotdee ] && . /etc/default/dotdee
+        if [ "$INOTIFY" = "1" ]; then
+                exec iwatch -f /etc/dotdee.xml -p /var/run/dotdee.pid
+        fi
+        ;;
+    reload)
+        echo "Reloading dotdee..."
+#        start-stop-daemon --stop --signal HUP -x dotdee --oknodo
+        ;;
+    restart|force-reload)
+        $0 stop
+        $0 start
+        ;;
+    stop)
+#        start-stop-daemon --stop -x dotdee --oknodo
+        ;;
+    *)
+        echo "Usage: $0 start|stop|restart" >&2
+        exit 3
+        ;;
+esac
