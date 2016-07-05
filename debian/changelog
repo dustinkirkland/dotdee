@@ -8,6 +8,9 @@ dotdee (1.13) unreleased; urgency=medium
   [ Dustin Kirkland ]
   * debian/init, debian/upstart:
     - deprecate upstart entirely
+  * debian/control, usr/sbin/dotdee:
+    - add dh-systemd build dep
+    - use service command for systemd compat
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Apr 2014 09:40:27 -0700
 

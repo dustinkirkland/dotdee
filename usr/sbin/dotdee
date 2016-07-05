@@ -98,7 +98,7 @@ original() {
 }
 
 restart_dotdee() {
-	/sbin/restart "${PKG}" || /sbin/start "${PKG}"
+	service "${PKG}" restart || service "${PKG}" start
 }
 
 setup() {
