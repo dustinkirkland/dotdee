@@ -1,6 +1,7 @@
-dotdee (1.14) unreleased; urgency=medium
+dotdee (2.0) unreleased; urgency=medium
 
-  * UNRELEASED
+  * Releasing Dotdee 2.0, which adds support for SystemD and drops support
+    for Upstart
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 05 Jul 2016 11:24:53 -0500
 
